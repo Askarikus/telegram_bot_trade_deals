@@ -33,8 +33,7 @@ if __name__ == "__main__":
                             for record in history[:(len(history) - len(storage))]:
                                 # для каждой записи, которой нет в хранилище
                                 # посылаем record через телеграмм-бот
-                                #print(get_data(record))
                                 new_message(my_bot, int(chat_id), get_data(record))
                                 # записываем в storage
                                 print(record, file=file_storage)
-                sleep(250)
+                sleep(1)
