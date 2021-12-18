@@ -1,5 +1,6 @@
 from alpha_vantage.timeseries import TimeSeries
 import pandas as pd
+from get_picture_211218 import plot_graph
 
 
 def get_data(rec):
@@ -21,8 +22,9 @@ def get_data(rec):
                              "3. low": "Low", "4. close": "Close",
                              "5. volume": "Volume"}, inplace=True)
         data.index = data.index + pd.Timedelta('06:30:00')
-        df = data[(data.index > open_time) & (data.index < close_time)].sort_index()
-        return df
+        df = data[(data.index >= open_time) & (data.index <= close_time)].sort_index()
+        plot_graph(df, symb, oper, lot, ticket)
+        return ticket
         #mpf.plot(df, type="candle", volume=False)
         # fig, ax = plt.subplots()
 

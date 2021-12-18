@@ -5,11 +5,11 @@ from time import sleep
 from get_quotes_211217 import get_data
 
 
-def new_message(bot, message, chat_id):
+def new_message(bot, chat_id, ticket):
     # только отправка сообщения
-    bot.send_message(chat_id, message)
-    #gif = open('demo.gif', 'rb')
-    #bot.send_animation(chat_id, gif)
+    # bot.send_message(chat_id, message)
+    pic = open(f'{ticket}.png', 'rb')
+    bot.send_photo(chat_id, pic)
 
 
 if __name__ == "__main__":
@@ -33,8 +33,8 @@ if __name__ == "__main__":
                             for record in history[:(len(history) - len(storage))]:
                                 # для каждой записи, которой нет в хранилище
                                 # посылаем record через телеграмм-бот
-                                print(get_data(record))
-                                new_message(my_bot, record, int(chat_id))
+                                #print(get_data(record))
+                                new_message(my_bot, int(chat_id), get_data(record))
                                 # записываем в storage
                                 print(record, file=file_storage)
                 sleep(250)
