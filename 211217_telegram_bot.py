@@ -9,8 +9,11 @@ def new_message(bot, chat_id, ticket):
     # только отправка сообщения
     # bot.send_message(chat_id, message)
     # отправка рисунка
-    pic = open(f'{ticket}.png', 'rb')
-    bot.send_photo(chat_id, pic)
+    if ticket:
+        pic = open(f'{ticket}.png', 'rb')
+        bot.send_photo(chat_id, pic)
+    else:
+        print("No picture to send yet")
 
 
 if __name__ == "__main__":
