@@ -8,6 +8,7 @@ from get_quotes_211217 import get_data
 def new_message(bot, chat_id, ticket):
     # только отправка сообщения
     # bot.send_message(chat_id, message)
+    # отправка рисунка
     pic = open(f'{ticket}.png', 'rb')
     bot.send_photo(chat_id, pic)
 
@@ -36,4 +37,4 @@ if __name__ == "__main__":
                                 new_message(my_bot, int(chat_id), get_data(record))
                                 # записываем в storage
                                 print(record, file=file_storage)
-                sleep(1)
+                sleep(1)  # в рабочей версии параметр 250
