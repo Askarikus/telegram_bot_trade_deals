@@ -11,6 +11,6 @@ def plot_graph(data, symbol, oper, lot, ticket, profit, otime, oprice, ctime, cp
     try:
         mpf.plot(data, type='candle', style=choice(styles), figratio=(15, 6),
                  alines=dict(alines=[(otime, oprice), (ctime, cprice)], linestyle='-.'),
-                 title=title, volume=False, savefig=f'{ticket}.png')
-    except TypeError:
+                 title=title, volume=False, savefig=f'graph/{ticket}.png')
+    except TypeError or ValueError:
         print("Can`t plot diagram. Out of range")
