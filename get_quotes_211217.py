@@ -42,11 +42,14 @@ def get_data(rec):
                 data.index = data.index + pd.Timedelta(time_zone_diff)
                 # фильтруем нужные бары по ранее определенным границам
                 df = data[(data.index >= left_border) & (data.index <= right_border)].sort_index()
-                # сохраняем готовый график в папке проекта под именем тикета
-                plot_graph(df, symb, oper, lot, ticket, profit, open_time, open_price, close_time, close_price,
-                           interval)
-                # возвращает номер тикета, он же название файла: ticket.png
-                return ticket
+                if df.size > 0:
+                    # сохраняем готовый график в папке проекта под именем тикета
+                    plot_graph(df, symb, oper, lot, ticket, profit, open_time, open_price, close_time, close_price,
+                               interval)
+                    # возвращает номер тикета, он же название файла: ticket.png
+                    return ticket
+                else:
+                    break
             except ValueError:
                 # не получилось построить график
                 print(f"Can`t plot diagram now for trying n={trying} interval {interval}")
