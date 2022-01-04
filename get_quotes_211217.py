@@ -6,10 +6,6 @@ from datetime import datetime
 from time import sleep
 
 
-def get_qoutes():
-    pass
-
-
 def get_data(rec):
     t_delta = 2  # время отсупа от момента исполнения сделки, в часах
     dt_form = '%Y.%m.%d %H:%M:%S'  # формат преобразования времени
@@ -28,11 +24,9 @@ def get_data(rec):
     right_border = (datetime.strptime(close_time, dt_form) + timedelta(hours=t_delta)).strftime(dt_form)
     alpha_vantage_key = open("alpha_vantage_key.txt", 'r')
     ts = TimeSeries(key=alpha_vantage_key.readline(), output_format="pandas")
-    # data = None
     # делаем попытки скачать котировки от меньшего интервала к большему
     for interval in intervals:
-        # 10 попыток для каждого интервала
-        for trying in range(10):
+        for trying in range(10):  # 10 попыток для каждого интервала
             try:
                 # делаем выборку по указанному символу(торг. инструменту), 'compact' - скачивается 100 баров
                 data, metadata = ts.get_intraday(symbol=symb, interval=interval, outputsize='full')
@@ -43,7 +37,7 @@ def get_data(rec):
                 # фильтруем нужные бары по ранее определенным границам
                 df = data[(data.index >= left_border) & (data.index <= right_border)].sort_index()
                 if df.size > 0:
-                    # сохраняем готовый график в папке проекта под именем тикета
+                    # если датасет не пустой, сохраняем готовый график в папке проекта под именем тикета
                     plot_graph(df, symb, oper, lot, ticket, profit, open_time, open_price, close_time, close_price,
                                interval)
                     # возвращает номер тикета, он же название файла: ticket.png
@@ -52,10 +46,11 @@ def get_data(rec):
                     break
             except ValueError:
                 # не получилось построить график
-                print(f"Can`t plot diagram now for trying n={trying} interval {interval}")
+                print(f"Can`t plot diagram now for trying n={trying} interval {interval}. Value Error")
                 sleep(6)
             except ConnectionError:
                 # если данные в моменте недоступны
-                print(f"Data not available now for trying n={trying} interval {interval}")
+                print(f"Data not available now for trying n={trying} interval {interval}. Connection Error")
                 sleep(6)
+    # в случае неудачи просто возвращаем изначальную строку
     return rec
