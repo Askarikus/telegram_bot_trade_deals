@@ -31,12 +31,16 @@ if __name__ == "__main__":
             dt_now = datetime.datetime.now()
             if 10 < dt_now.second < 59:  # фильтрация по времени, должен проверять не часто, раз в 5 минут
                 # первые 10 секунд отводятся для записи файла истории сделок
-                path_to_history = Path("/home", "askar", "Python_Proj", "telegram_bot_trade_deals", "history.txt")
+                # path_to_history = Path("C:\\", "Users", "Administrator", "AppData", "Roaming", "MetaQuotes",
+                #                        "Terminal", "Common", "Files", "history_mq4.txt")
+                # path_to_history = Path("/home", "askar", "Python_Proj", "telegram_bot_trade_deals", "history.txt")
+                path_to_history = Path("C:\\", "Users", "Аскар", "Downloads", "Projects_Py", "PyCharm_Projects",
+                                        "300921_telegram_bot", "history.txt")
                 with open(path_to_history, 'r') as file_history_from_mt5, open('storage.txt', 'a+') as file_storage:
                     # файл-хранилище в режиме чтения/добавления
                     file_storage.seek(0)  # в режиме добавления указатель находится в конце файла
-                    storage = [line.rstrip('\n') for line in file_storage]
-                    history = [line.rstrip('\n') for line in file_history_from_mt5]
+                    storage = [line.rstrip('\n') for line in file_storage if line.rstrip('\n')]
+                    history = [line.rstrip('\n') for line in file_history_from_mt5 if line.rstrip('\n')]
                     # записали массивы истории и хранилища, заодно подсчитаем и сравним количество строк
                     if len(history) > len(storage):
                         # если в истории прибавились записи
