@@ -36,27 +36,33 @@ if __name__ == "__main__":
                 # path_to_history = Path("/home", "askar", "Python_Proj", "telegram_bot_trade_deals", "history.txt")
                 path_to_history = Path("C:\\", "Users", "Аскар", "Downloads", "Projects_Py", "PyCharm_Projects",
                                         "300921_telegram_bot", "history.txt")
-                with open(path_to_history, 'r') as file_history_from_mt5, open('storage.txt', 'a+') as file_storage:
-                    # файл-хранилище в режиме чтения/добавления
-                    file_storage.seek(0)  # в режиме добавления указатель находится в конце файла
-                    storage = [line.rstrip('\n') for line in file_storage if line.rstrip('\n')]
-                    history = [line.rstrip('\n') for line in file_history_from_mt5 if line.rstrip('\n')]
-                    # записали массивы истории и хранилища, заодно подсчитаем и сравним количество строк
-                    if len(history) > len(storage):
-                        # если в истории прибавились записи
-                        for record in history[:(len(history) - len(storage))]:
-                            # для каждой записи, которой нет в хранилище посылаем record через телеграм-бот
-                            data = get_data(record)
-                            # если возвращается строка, то отправляем как есть
-                            if data == record:
-                                new_message(my_bot, int(chat_id), record)
-                            else:
-                                # в случае успешной отрисовки графика
-                                new_picture(my_bot, chat_id, data)
-                            # записываем в storage
-                            print(record, file=file_storage)
-                            deals_counter += 1
-                            # если с момента запуска прошло 7 сделок, то отправляем пароль
-                            if deals_counter > 7:
-                                new_message(my_bot, int(chat_id), "password")
+                try:
+                    with open(path_to_history, 'r') as file_history_from_mt5, open('storage.txt', 'a+') as file_storage:
+                        # файл-хранилище в режиме чтения/добавления
+                        file_storage.seek(0)  # в режиме добавления указатель находится в конце файла
+                        storage = [line.rstrip('\n') for line in file_storage if line.rstrip('\n')]
+                        history = [line.rstrip('\n') for line in file_history_from_mt5 if line.rstrip('\n')]
+                        # записали массивы истории и хранилища, заодно подсчитаем и сравним количество строк
+                        if len(history) > len(storage):
+                            # если в истории прибавились записи
+                            for record in history[:(len(history) - len(storage))]:
+                                # для каждой записи, которой нет в хранилище посылаем record через телеграм-бот
+                                data = get_data(record)
+                                # если возвращается строка, то отправляем как есть
+                                if data == record:
+                                    new_message(my_bot, int(chat_id), record)
+                                else:
+                                    # в случае успешной отрисовки графика
+                                    new_picture(my_bot, chat_id, data)
+                                # записываем в storage
+                                print(record, file=file_storage)
+                                deals_counter += 1
+                                # если с момента запуска прошло 7 сделок, то отправляем пароль
+                                if deals_counter > 7:
+                                    new_message(my_bot, int(chat_id), "password")
+                except PermissionError:
+                    # исключаем ошибку одновременного доступа к файлу history
+                    dt_now = datetime.datetime.now()
+                    current_time = dt_now.strftime('%H:%M:%S')
+                    print("PermissionError ", current_time)
                 sleep(1)  # В РАБОЧЕЙ ВЕРСИИ параметр 250
